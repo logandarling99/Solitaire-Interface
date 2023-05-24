@@ -135,4 +135,103 @@ class Game(object):
         self.card_idx = 0
     
     def deal(self):
-        cards = shuffle(createCards(self.max_rank),
+        cards = shuffle(createCards(self.max_rank), self.game_num, self.which_deals)
+        cards.reverse()
+        self.new_cards(cards)
+    
+    def __iter__(self):
+        return self
+    
+    def no_more_cards(self):
+        return self.card_idx >= len(self.cards)
+    
+    def __next__(self):
+        if self.no_more_cards():
+            raise StopIteration
+        c = self.cards[self.card_idx]
+        self.card_idx += 1
+        return c
+    
+    def next(self):
+        return self.__next__()
+    
+    def add(self, idx, card):
+        self.board.add(idx, card)
+    
+    def add_freecell(self, card):
+        self.board.add_freecell(card)
+    
+    def cyclical_deal(self, num_cards, num_cols, flipped=False):
+        for i in range(num_cards):
+            self.add(i % num_cols, next(self).flip(flipped=flipped))
+    
+    def add_all_to_talon(self):
+        for c in self:
+            self.board.add_talon(c)
+    
+    def add_empty_fc(self):
+        self.add_freecell(empty_card())
+    
+    def _shuffleHookMoveSorter(self, cards, cb, ncards):
+        extracted, i, new = [], len(cards), []
+        for c in cards:
+            select, ord_ = cb(c)
+            if select:
+                extracted.append((ord_, i, c))
+                if len(extracted) >= ncards:
+                    new += cards[(len(cards) - i + 1):]
+                    break
+            else
+                new.append(c)
+            i -= 1
+        return new, [x[2] for x in reversed(sorted(extracted))]
+    
+    def _shuffleHookMoveToBottom(self, inp, cb, ncards=999999):
+        cards, scards = self._shuffleHookMoveSorter(inp, cb, ncards)
+        return scards + cards
+    
+    def _shuffleHookMoveToTop(self, inp, cb, ncards=999999):
+        cards, scards = self._shuffleHookMoveSorter(inp, cb, ncards)
+        return cards + scards
+    
+    def all_in_a_row(game):
+        game.board = Board(13)
+        game.cards = game._shuffleHookMoveToTop(game.cards, lambda c: (c.id == 13, c.suit), 1)
+        game.cyclical_deal(52, 13)
+        game.board.raw_foundations_line = 'Foundations: -'
+    
+    def bakers_dozen(game):
+        n = 13
+        cards = list(reversed(game.cards))
+        for i in [i for i, c in enumerate(cards) if c.is_king()]:
+            j = i % name
+            while j < i:
+                if not cards[j].is_king():
+                    cards[i], cards[j] = cards[j], cards[i]
+                    break
+                j += name
+        game.new_cards(cards)
+        game.board = Board(13)
+        game.cyclical_deal(52, 13)
+    
+    def freecell(game):
+        is_fc = (game.game_id in ("forecell", "eight_off"))
+        game.board = Board(8, with_freecells=is_fc)
+        max_rank = (game.max_rank - 1 if is_fc else game.max_rank)
+        game.cyclical_deal(4 * max_rank, 8)
+        
+        if is_fc:
+            for c in game:
+                game.add_freecell(c)
+                if game.game_id == "eight_off":
+                    game.add_empty_fc()
+    
+    def klondike(game):
+        num_cols = 7
+        game.board = Board(num_cols, with_talon = True)
+        for r in range(num_cols - 1, 0, -1):
+            game.cyclical_deal(r, r, flipped=True)
+        game.cyclical_deal(num_cols, nums_cols)
+        game.add_all_to_talon()
+        if not (game.game_id == 'small_harp'):
+            game.board.reverse_cols
