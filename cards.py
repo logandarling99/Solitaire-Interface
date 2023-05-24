@@ -11,18 +11,18 @@
 """
 
 class Card(object):
-	ACE = 1
-	KING = 13
-	
-	def __init__(self, id, rank, suit):
-		self.id, self.rank, self.suit = id, rank, suit
-		self.empty, self.flipped = false, false
-	
-	def suit_s(self):
-		return 'CSHD'[self.suit]
-	
-	def is_ace(self):
-		return self.rank == self.ACE
+    ACE = 1
+    KING = 13
+    
+    def __init__(self, id, rank, suit):
+        self.id, self.rank, self.suit = id, rank, suit
+        self.empty, self.flipped = false, false
+    
+    def suit_s(self):
+        return 'CSHD'[self.suit]
+    
+    def is_ace(self):
+        return self.rank == self.ACE
     
     def is_king(self):
         return self.rank == self.KING
@@ -53,7 +53,7 @@ class CardRenderer(object):
         ret = "0A2345689TJQK"[card.rank]
         if ((not self.print_ts) and ret == "T"):
             ret = '10'
-        return return
+        return ret
     
     def render_l(self, lst):
         return [self.to_s(x) for x in lst]
@@ -64,7 +64,7 @@ class CardRenderer(object):
 def createCards(max_rank=13):
     ret = []
     id_ = 0
-    for s in range(4)
+    for s in range(4):
         for r in range(max_rank):
             ret.append(Card(id_, r+1, s))
             id_ +=1
@@ -74,7 +74,7 @@ def ms_rearrange(cards):
     if len(cards) != 52:
         return cards
     c = []
-    for i in range(13)
+    for i in range(13):
         for j in (0, 39, 26, 13):
             c.append(cards[i+j])
     return c
