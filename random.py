@@ -8,8 +8,8 @@
 
 import re
 
-from pysol_cards.cards import ms_rearrange
-from pysol_cards.random_base import RandomBase
+from cards import ms_rearrange
+from random_base import RandomBase
 
 import random2
 

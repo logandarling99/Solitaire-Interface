@@ -69,12 +69,12 @@ class Board(object):
                 cells.append(renderer.found_s(self.foundations[f]))
             
         if len(cells):
-            self.add_line("Foundations:" _ ("".join([" " + s for s in cells])))
+            self.add_line("Foundations:" + ("".join([" " + s for s in cells])))
     
     def gen_lines(self, renderer):
         self._lines = []
         if self.with_talon:
-            self.add_line("Talon: " _ renderer.l_concat(self.talon))
+            self.add_line("Talon: " + renderer.l_concat(self.talon))
         if self.with_foundations:
             self.print_foundations(renderer)
         if self.raw_foundations_cb:
@@ -105,7 +105,7 @@ class Game(object):
     GAMES_MAP = {}
     for k, v in REVERSE_MAP.items():
         for name in [k] + v:
-            GAMES_MAP[name = k
+            GAMES_MAP[name] = k
     
     def __init__(self, game_id, game_num, which_deals, max_rank=13):
         self.game_id = game_id
@@ -181,7 +181,7 @@ class Game(object):
                 if len(extracted) >= ncards:
                     new += cards[(len(cards) - i + 1):]
                     break
-            else
+            else:
                 new.append(c)
             i -= 1
         return new, [x[2] for x in reversed(sorted(extracted))]
