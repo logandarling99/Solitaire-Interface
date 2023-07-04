@@ -6,7 +6,7 @@
 #
 # Distributed under terms of the MIT license.
 
-from errors import SubclassResponsibility
+from .errors import SubclassResponsibility
 
 class RandomBase(object):
     DEALS_PYSOL = 0
