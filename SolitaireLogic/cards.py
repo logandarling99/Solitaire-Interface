@@ -21,6 +21,12 @@ class Card(object):
     def suit_s(self):
         return 'CSHD'[self.suit]
     
+    def is_black(self):
+        return (self.suit == 0 or self.suit == 1)
+    
+    def is_red(self):
+        return (self.suit == 2 or self.suit == 3)
+    
     def is_ace(self):
         return self.rank == self.ACE
     
