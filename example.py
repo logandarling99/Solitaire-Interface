@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, random
 sys.path.append(os.path.abspath(os.path.join('.', 'SolitaireLogic')))
 
 from SolitaireLogic.cards import CardRenderer
@@ -16,4 +16,10 @@ ms24_str = fc24.calc_layout_string(
 print(fc24.board._lines)
 print(ms24_str)
 
-ValidateMoves().createValidMoves()
+validMoves = ValidateMoves(fc24.board)
+while not validMoves.CheckWin():
+    for validMove in validMoves.validMoveList:
+        print(validMove.moveType)
+    randomMove = random.randint(0, len(validMoves.validMoveList))
+    validMoves.MoveCards(randomMove)
+    print(ms24_str)

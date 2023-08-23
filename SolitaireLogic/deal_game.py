@@ -32,21 +32,6 @@ class Board(object):
     
     def add(self, idx, card):
         self.columns[idx].append(card)
-    
-    def translateIndexToColumn(self, index):
-        if(index < 8):
-            return self.columns[index]
-        elif(index < 12):
-            return self.freecells[index-8]
-        elif(index < 16):
-            return self.foundations[index-12]
-            
-    def moveCards(self, startIndex, moveIndex, card):
-        initIdxList = self.translateIndexToColumn(startIndex)
-        cardListIdx = initIdxList.index(card)
-        newColumnList = self.translateIndexToColumn(moveIndex)
-        cardList = initIdxList[cardListIdx:]
-        newColumnList.append(cardList)
         
     def print_foundations(self, renderer):
         cells = []
